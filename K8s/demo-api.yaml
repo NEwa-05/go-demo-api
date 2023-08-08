@@ -1,10 +1,4 @@
 ---
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: demo
-
----
 kind: Deployment
 apiVersion: apps/v1
 metadata:
@@ -22,13 +16,13 @@ spec:
     spec:
       containers:
       - name: api-demo
-        image: newa/api-demo:1.0
+        image: newa/demo-api:1.0
         imagePullPolicy: Always
         env:
           - name: APP_PORT
             value: ":443"
         volumeMounts:
-          - name: demo-api-tls
+          - name: api-demo-tls
             mountPath: "/tmp"
             readOnly: true
       volumes:
@@ -41,7 +35,9 @@ apiVersion: v1
 kind: Service
 metadata:
   name: api-demo-svc
-  namespace: dempo
+  namespace: demo
+  annotations:
+    traefik.ingress.kubernetes.io/service.serverstransport: demo-demo-api-transport@kubernetescrd
   labels:
     app: api-demo
 spec:
@@ -51,3 +47,50 @@ spec:
     name: https
   selector:
     app: api-demo
+
+---
+apiVersion: traefik.io/v1alpha1
+kind: ServersTransport
+metadata:
+  name: demo-api-transport
+  namespace: demo
+spec:
+  serverName: gateway.domain.tld
+  insecureSkipVerify: true
+
+---
+apiVersion: hub.traefik.io/v1alpha1
+kind: API
+metadata:
+  name: demo-api
+  namespace: demo
+  labels:
+    area: demo
+spec:
+  pathPrefix: /newline
+  service:
+    name: api-demo-svc
+    openApiSpec:
+      path: /toto.yaml
+      port:
+        number: 443
+    port:
+      number: 443
+
+#---
+#apiVersion: traefik.io/v1alpha1
+#kind: IngressRoute
+#metadata:
+#  name: demo-tls
+#  namespace: demo
+#spec:
+#  entryPoints:
+#    - websecure
+#  routes:
+#    - kind: Rule
+#      match: Host(`demo-api.domain.tld`)
+#      services:
+#        - name: api-demo-svc
+#          port: 443
+#          serversTransport: demo-api-transport
+#  tls: {}

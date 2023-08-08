@@ -11,7 +11,13 @@ docker buildx build -t newa/demo-api:1.0 --platform linux/amd64 -f Dockerfile . 
 ### Generate TLS certificate
 
 ```bash
-bash gencert.sh url.domain.example
+bash gencert.sh gateway.domain.tld
+```
+
+### Create demo namespace
+
+```bash
+kubectl create ns demo
 ```
 
 ### Create TLS certificate Secret

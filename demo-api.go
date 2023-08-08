@@ -58,5 +58,5 @@ func main() {
 	myRouter.HandleFunc("/newlines", returnAllLines)
 	myRouter.HandleFunc("/newline", postAPIHandler).Methods("POST")
 	myRouter.HandleFunc("/newline/{id}", returnSingleLine)
-	log.Fatal(http.ListenAndServeTLS(appPort, "/tmp/server.crt", "/tmp/server.key", myRouter))
+	log.Fatal(http.ListenAndServeTLS(appPort, "/tmp/tls.crt", "/tmp/tls.key", myRouter))
 }
