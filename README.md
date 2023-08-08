@@ -1,13 +1,14 @@
 # go-demo-api
 
 ## Build image
+
 ```bash
 docker buildx build -t newa/demo-api:1.4 --platform linux/amd64 -f Dockerfile . --push
 ```
 
 ## Deploy in K8s
 
-### Generate TLS certificate 
+### Generate TLS certificate
 
 ```bash
 bash gencert.sh url.domain.example
