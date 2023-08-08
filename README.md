@@ -3,7 +3,7 @@
 ## Build image
 
 ```bash
-docker buildx build -t newa/demo-api:1.4 --platform linux/amd64 -f Dockerfile . --push
+docker buildx build -t newa/demo-api:1.0 --platform linux/amd64 -f Dockerfile . --push
 ```
 
 ## Deploy in K8s
